@@ -46,7 +46,7 @@ def mgtt_on_connect(client, userdata, flags, rc):
     userdata['influx'].create_database(database)
     userdata['influx'].switch_database(database)
 
-    client.subscribe(userdata['base_topic'] + '/+/+/+/+')
+    client.subscribe(userdata['base_topic'] + '+/+/+/+')
 
 
 def mgtt_on_message(client, userdata, msg):
@@ -78,8 +78,8 @@ def main():
 
     log.basicConfig(level=DEBUG if opts.get('debug') else INFO, format=LOG_FORMAT)
 
-    client = InfluxDBClient(opts.get('influxdb-host', DEFAULT_INFLUXDB_HOST),
-                            opts.get('influxdb-port', DEFAULT_INFLUXDB_PORT),
+    client = InfluxDBClient(opts.get('influxdb_host', DEFAULT_INFLUXDB_HOST),
+                            opts.get('influxdb_port', DEFAULT_INFLUXDB_PORT),
                             'root', 'root')
 
     base_topic = opts.get('base_topic', DEFAULT_MQTT_TOPIC).rstrip('/') + '/'
