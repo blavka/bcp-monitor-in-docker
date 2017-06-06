@@ -37,6 +37,22 @@ services:
       INFLUXDB_ADMIN_ENABLED: "true"
       INFLUXDB_GRAPHITE_ENABLED: "true"
 
+  mqtt_to_influxdb:
+    container_name: monitor-mqtt_to_influxdb
+    image: jfloff/alpine-python:3.4-slim
+    volumes:
+      - ./requirements.txt:/requirements.txt
+      - ./bc-mqtt-to-influxdb.py:/usr/src/app/bc-mqtt-to-influxdb.py
+    links:
+      - mqtt
+      - influxdb
+    depends_on:
+      - mqtt
+      - gateway
+      - influxdb
+    command:
+      - "python /usr/src/app/bc-mqtt-to-influxdb.py -h mqtt --influxdb-host influxdb"
+
   grafana:
     container_name: monitor-grafana
     image: grafana/grafana
