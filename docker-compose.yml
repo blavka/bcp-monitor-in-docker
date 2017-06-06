@@ -9,6 +9,21 @@ services:
     ports:
       - 1883:1883
 
+  gateway:
+    container_name: monitor-gateway
+    image: jfloff/alpine-python:3.4-slim
+    volumes:
+      - ./requirements.txt:/requirements.txt
+      - ./bc-gateway.py:/usr/src/app/bc-gateway.py
+    devices:
+      - "/dev/ttyACM0:/dev/ttyACM0"
+    links:
+      - mqtt
+    depends_on:
+      - mqtt
+    command:
+      - "python /usr/src/app/bc-gateway.py -W -d /dev/ttyACM0 -h mqtt"
+
   influxdb:
     container_name: monitor-influxdb
     image: influxdb:alpine
