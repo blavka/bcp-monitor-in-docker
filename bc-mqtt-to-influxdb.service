@@ -1,0 +1,13 @@
+[Unit]
+Description=mqtt to InfluxDB
+After=network.target mosquitto.service
+Requires=mosquitto.service
+
+[Service]
+ExecStart=/usr/bin/bc-mqtt-to-influxdb
+User=bigclown
+Restart=always
+RestartSec=10s
+
+[Install]
+WantedBy=multi-user.target
